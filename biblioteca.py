@@ -491,7 +491,7 @@ def mostrar_menu ():
         elif opción == 12:
             salida = input("Confirma salida (s/n):")
             if (salida == "s"):
-                print("¡Hasta luego!")
+                print("¡¡Hasta luego!!")
                 break 
 
         else:
