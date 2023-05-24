@@ -30,8 +30,10 @@ def cargar_datos (nombre_de_archivo):
                 keys = i
                 lista_dict.append({"ID": keys[0], "NOMBRE": keys[1], "MARCA":keys[2],"PRECIO":float(i[3].replace("$","")),"CARACTERISTICAS":keys[4]})
         return lista_dict
+
 ##2. Listar cantidad por marca: Muestra todas las marcas y la cantidad
 ##de insumos correspondientes a cada una.
+
 ##def listar_cantidad_por_marca(lista:list)->none : recibe una lista de diccionarios como parámetro. 
 # Su objetivo es contar la cantidad de elementos por marca 
 # y mostrar el resultado por pantalla.Inicializa un diccionario vacío llamado
@@ -52,9 +54,11 @@ def listar_cantidad_por_marca(lista):
         print(f"|Marca: {marca} | Cantidad: {cantidad}|")
 
 # 3. Listar insumos por marca: Muestra, para cada marca, el nombre y
+
 # precio de los insumos correspondientes.
 ##def listar_innsumos_por_marca(lista:list):  recibe una lista de diccionarios como parámetro. 
 # Su objetivo es agrupar los insumos por marca y mostrar los resultados por pantalla.
+
 def listar_insumos_por_marca(lista):
     insumos_por_marca = {}
     for insumo in lista:
@@ -89,9 +93,11 @@ def mostrar_caracteristica (lista):
     caracteristicaFiltrada = input("Ingrese una caracteristica: ")
 
     return caracteristicaFiltrada
+
 ##def filtrar_insumos_por_caracteristica(lista:list, caracteristica:str): los insumos de la lista
 #  que tienen la característica especificada y muestra su información al usuario. 
 #No retorna ningún valor, solo imprime la información en la consola.
+
 def filtrar_insumos_por_caracteristica(lista, caracteristica):
     print("--------------------------------------------------")
     print("\nPRODUCTOS CON ESA CARACTERISTICA ")
@@ -116,6 +122,7 @@ def filtrar_insumos_por_caracteristica(lista, caracteristica):
 # ordenamiento,que compara primero la marca y luego el precio 
 # (en orden descendente, indicado por el signo menos -)
 # No retorna ningún valor, solo imprime la información en la consola.
+
 def listar_insumos_ordenados(lista):
 
     insumos_ordenados = sorted(lista, key=lambda x: (x["MARCA"], -x["PRECIO"]))
@@ -138,7 +145,6 @@ def listar_insumos_ordenados(lista):
 def mostrar_productos_por_marca(lista, marca):
     productos_disponibles = []
     
-    # Buscar productos de la marca especificada
     for insumo in lista:
         if insumo["MARCA"].lower() == marca.lower():
             productos_disponibles.append(insumo)
@@ -199,12 +205,12 @@ def realizar_compra(lista):
         archivo_factura.write("-----------------\n")
         
         for producto in productos_comprados:
-            archivo_factura.write(f"Producto: {producto['Producto']}\n")
-            archivo_factura.write(f"Cantidad: {producto['Cantidad']}\n")
-            archivo_factura.write(f"Subtotal: {producto['Subtotal']}$\n")
+            archivo_factura.write(f"|Producto: {producto['Producto']}|\n")
+            archivo_factura.write(f"|Cantidad: {producto['Cantidad']}|\n")
+            archivo_factura.write(f"|Subtotal: {producto['Subtotal']}$|\n")
             archivo_factura.write("-----------------\n")
         
-        archivo_factura.write(f"Total de la compra: {total_compra:.2f}$")
+        archivo_factura.write(f"|Total de la compra: {total_compra:.2f}$|")
     
     print("Compra finalizada. Se ha generado la factura de la compra.")
 
@@ -218,6 +224,7 @@ def realizar_compra(lista):
 # La función lambda verifica si la palabra "Alimento" está presente en el valor de la clave "NOMBRE" 
 # de cada diccionario.
 # Convierte el resultado filtrado en una lista utilizando la función list.
+
 def guardar_productos_en_json(lista, nombre_archivo):
     import json
     alimento_filtrado = list(filter(lambda insumo:'Alimento' in insumo["NOMBRE"], lista))
@@ -231,7 +238,7 @@ def guardar_productos_en_json(lista, nombre_archivo):
 # 8. Leer desde formato JSON: Permite mostrar un listado de los insumos
 # guardados en el archivo JSON generado en la opción anterior.
 
-#def leer_archivo_jso(nombre_archivo:strig):cibe el nombre de un archivo como parámetro y
+#def leer_archivo_jso(nombre_archivo:strig):recibe el nombre de un archivo como parámetro y
 #  se encarga de leer y mostrar los insumos almacenados en ese archivo en formato JSON.
 def leer_archivo_jso(nombre_archivo):
     import json
@@ -279,6 +286,107 @@ def actualizar_csv (lista)->list:
 
 # 10. Salir del programa
 
+##Consigna Parcial:
+# El programa deberá permitir agregar un nuevo producto a la lista (mediante una
+# nueva opción de menú).
+# Al momento de ingresar la marca del producto se deberá mostrar por pantalla un
+# listado con todas las marcas disponibles. Las mismas serán cargadas al programa
+# desde el archivo marcas.txt.
+# En cuanto a las características, se podrán agregar un mínimo de una y un máximo
+# de 3.
+
+#def cargar_marcas(nombre_archivo)-> marcas:list : recibe el nombre del archivo que 
+#que contiene la lista de marcas. Lee el archivo linea por linea y agrega cada marca 
+#a una lista "marcas", se ultiliza el metodo strip() para eliminar el espacio
+#blanco al inicio y al final de cada linea
+
+def cargar_marcas(nombre_archivo):
+    marcas = []
+    with open(nombre_archivo, 'r') as archivo:
+        for linea in archivo:
+            marca = linea.strip()
+            marcas.append(marca)
+    return marcas
+
+#def agregar_nuevo_producto(lista:list, marcas:list):a función no tiene una salida 
+# explícita, ya que simplemente modifica la lista lista pasada como parámetro y 
+# muestra mensajes por pantalla para informar al usuario sobre el resultado de la operación.
+#la función enumerate enumara las marcas empezando en 1
+
+def agregar_nuevo_producto(lista, marcas):
+
+    nuevo_producto = {}
+    nuevo_producto['ID'] = input("Ingrese el ID del producto (MAYOR A 51):")
+    nuevo_producto['NOMBRE'] = input("Ingrese el nombre del producto: ")
+
+    print("Marcas disponibles:")
+    for i, marca in enumerate(marcas, 1):   
+        print(f"{i}. {marca}")
+    marca_index = int(input("Ingrese el número de la marca del nuevo producto: "))
+    if marca_index >= 1 and marca_index <= len(marcas):
+        nuevo_producto['MARCA'] = marcas[marca_index - 1]
+    else:
+        print("¡Opción inválida! No se asignará una marca al nuevo producto.")
+
+    nuevo_producto['PRECIO'] = float(input("Ingrese el precio del nuevo producto: "))
+
+    caracteristicas = []
+    print("Ingrese las características del nuevo producto (mínimo 1, máximo 3). Ingrese 'salir' para finalizar.")
+    while len(caracteristicas) < 3:
+        caracteristica = input(f"Ingrese la característica {len(caracteristicas) + 1}: ")
+        if caracteristica.lower == 'salir':
+            break
+        caracteristicas.append(caracteristica)
+    nuevo_producto['CARACTERISTICAS'] = '~'.join(caracteristicas)
+
+    lista.append(nuevo_producto)
+    print("El nuevo producto ha sido agregado exitosamente.")
+
+
+##2. Agregar una opción para guardar todos los datos actualizados (incluyendo las altas).
+##El usuario elegirá el tipo de formato de exportación: csv o json.
+#def guardar_en_csv(lista):Recibe un parámetro lista, que es la lista de insumos actualizada
+#solicita al usuario que ingrese el nombre del archivo CSV en el cual desea guardar los datos 
+# actualizados.
+#Muestra un mensaje indicando que los datos actualizados se han guardado en el archivo CSV 
+#especificado
+
+def guardar_en_csv(lista):
+    print ("Si desea que pise el otro archivo ya creado (insumos.csv) colocar el mismo nombre.")
+    nombre_archivo = input("Ingrese el nombre del archivo CSV: ")
+    import csv
+    with open(nombre_archivo, "w", newline="", encoding="utf-8") as file:
+        fieldnames = ["ID", "NOMBRE", "MARCA", "PRECIO", "CARACTERISTICAS"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(lista)
+    print(f"Los datos actualizados se han guardado en el archivo '{nombre_archivo}' en formato CSV.")
+
+#def guardar_en_json(lista):Recibe un parámetro lista, que es la lista de insumos actualizada
+#solicita al usuario que ingrese el nombre del archivo JSON en el cual desea guardar los datos 
+# actualizados.
+#Muestra un mensaje indicando que los datos actualizados se han guardado en el archivo CSV 
+#especificado
+def guardar_en_json(lista):
+    import json
+    nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
+    with open(nombre_archivo, "w", encoding="utf-8") as file:
+        json.dump(lista, file, indent=2, ensure_ascii=False)
+    print(f"Los datos actualizados se han guardado en el archivo '{nombre_archivo}' en formato JSON.")
+
+#def guardar_datos_actualizados(lista:list): Recibe un parámetro lista, que es la lista de insumos actualizada.
+#permite al usuario elegir el formato de exportación (CSV o JSON) y guardar los datos actualizados en el 
+# formato seleccionado
+def guardar_datos_actualizados(lista):
+    formato = input("Ingrese el formato de exportación (csv/json): ")
+    if formato.lower() == "csv":
+        guardar_en_csv(lista)
+    elif formato.lower() == "json":
+        guardar_en_json(lista)
+    else:
+        print("Formato de exportación no válido.")
+
+
 #def menu ():
 # representa el menú principal del programa, donde se presentan varias opciones al usuario
 #  y se ejecutan las funciones correspondientes según la opción seleccionada.
@@ -286,21 +394,24 @@ def mostrar_menu ():
     import os
     flag_json = False
     flag_cargar_datos = False
+    flag_cambios = False
     while True:
         menu = '''
 ╔════════════════════════════════════╗
-║             MENÚ PRINCIPAL           ║
+║             MENÚ PRINCIPAL         ║
 ╠════════════════════════════════════╣
-║ 1. Cargar datos desde archivo        ║
-║ 2. Listar cantidad por marca         ║
-║ 3. Listar insumos por marca          ║
-║ 4. Buscar insumo por característica  ║
-║ 5. Listar insumos ordenados          ║
-║ 6. Realizar compras                  ║
-║ 7. Guardar en formato JSON           ║
-║ 8. Leer desde formato JSON           ║
-║ 9. Actualizar precios                ║
-║ 10. Salir del programa               ║
+║ 1. Cargar datos desde archivo      ║
+║ 2. Listar cantidad por marca       ║
+║ 3. Listar insumos por marca        ║
+║ 4. Buscar insumo por característica║
+║ 5. Listar insumos ordenados        ║
+║ 6. Realizar compras                ║
+║ 7. Guardar en formato JSON         ║
+║ 8. Leer desde formato JSON         ║
+║ 9. Actualizar precios              ║
+║ 10. Agregar nuevo producto         ║
+║ 11. Guardar datos                  ║
+║ 12. Salir del programa             ║
 ╚════════════════════════════════════╝
 '''
         print(menu)
@@ -340,7 +451,6 @@ def mostrar_menu ():
                 listar_cantidad_por_marca(lista_dict)
                 realizar_compra(lista_dict)
                 
-
         elif opción == 7:
             if flag_cargar_datos== False:
                 print("Primero debes cargar los datos.")
@@ -363,6 +473,22 @@ def mostrar_menu ():
             actualizar_csv (precios_actualizados)
 
         elif opción == 10:
+            if flag_cargar_datos== False:
+                print("Primero debes cargar los datos.")
+            else:
+                marcas =cargar_marcas("marcas.txt")
+                agregar_nuevo_producto(lista_dict,marcas)
+                flag_cambios = True
+
+        elif opción == 11:
+            if flag_cargar_datos== False:
+                print("Primero debes cargar los datos.")
+            elif flag_cambios == False:
+                print("Agregue nuevos datos a la lista (Opción 10) para realizar esta acción")
+            else:
+                guardar_datos_actualizados(lista_dict)
+                                       
+        elif opción == 12:
             salida = input("Confirma salida (s/n):")
             if (salida == "s"):
                 print("¡Hasta luego!")
@@ -372,5 +498,3 @@ def mostrar_menu ():
             print("¡¡¡OPCION INVALIDA POR FAVOR INGRESE UNA OPCIÓN VALIDA!!!")
         os.system("pause")
         os.system("cls")
-
-
